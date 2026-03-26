@@ -1,13 +1,36 @@
 const express = require('express');
 const { nanoid } = require('nanoid')
+const cors = require("cors");
 const app = express();
 const port = 3000;
 
-let users = [
-    { id: nanoid(6), name: 'Карина', age: 19 },
-    { id: nanoid(6), name: 'Александр', age: 19 },
-    { id: nanoid(6), name: 'Бездна', age: 1 },
+let products = [
+    {
+        id: nanoid(6),
+        photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYn4l1flYazmEbVA9BiTvYiR-HpYuqj0FZp3AZN9Ehfz9VSRU8IfXbDdXwqSaBh2EXEUpVsVaMXnNoHr9UCRhwPgWHfNq3PBOmuhMrGQ&s=10',
+        name: 'Мороженое ванильное, стаканчик',
+        category: 'Замороженные продукты',
+        description: "Неуникальный вкус, стандартная классика",
+        price: 90,
+    },
+    {
+        id: nanoid(6),
+        photo: 'https://lifehacker.ru/wp-content/uploads/2020/01/shutterstock_265726205_1581604259-e1588846196843-scaled.jpg',
+        name: 'Мороженое шоколадное, стаканчик',
+        category: 'Замороженные продукты',
+        description: "Если хочется рот в коричневой субстанции",
+        price: 90,
+    },
+    {
+        id: nanoid(6),
+        name: 'Ничего',
+        category: 'Пустота',
+        description: "Абсолютное ничего",
+        price: 0,
+    },
 ]
+
+
 
 // Middleqware
 app.use(express.json());
@@ -21,73 +44,84 @@ app.use((req, res, next) => {
     next();
 });
 
-// Функция для получения пользователя из списка
-function findUserOr404(id, res) {
-    const user = users.find(u => u.id == id);
-    if (!user) {
-        res.status(404).json({ error: "User not found" });
+// Функция для получения продукта из списка
+function findProductOr404(id, res) {
+    const product = products.find(p => p.id == id);
+    if (!product) {
+        res.status(404).json({ error: "Product not found" });
         return null;
     }
-    return user;
+    return product;
 };
 
-// POST /api/users
-app.post("/api/users", (req, res) => {
-    const { name, age } = req.body;
+// POST /api/products
+app.post("/api/products", (req, res) => {
+    const { photo, name, price, category, description } = req.body;
 
-    const newUser = {
+    const newProduct = {
         id: nanoid(6),
+        photo: photo.trim(),
         name: name.trim(),
-        age: Number(age),
+        category: category.trim(),
+        description: description.trim(),
+        price: Number(price),
     };
 
-    users.push(newUser);
-    res.status(201).json(newUser);
+    products.push(newProduct);
+    res.status(201).json(newProduct);
 });
 
-// GET /api/users
-app.get("/api/users", (req, res) => {
-    res.json(users);
+// GET /api/products
+app.get("/api/products", (req, res) => {
+    res.json(products);
 });
 
-// GET /api/users/:id
-app.get("/api/users/:id", (req, res) => {
+// GET /api/products/:id
+app.get("/api/products/:id", (req, res) => {
     const id = req.params.id;
 
-    const user = findUserOr404(id, res);
-    if (!user) return;
+    const product = findProductOr404(id, res);
+    if (!product) return;
 
-    res.json(user);
+    res.json(product);
 });
 
-// PATCH /api/users/:id
-app.patch("/api/users/:id", (req, res) => {
+// PATCH /api/products/:id
+app.patch("/api/products/:id", (req, res) => {
     const id = req.params.id;
 
-    const user = findUserOr404(id, res);
-    if (!user) return;
+    const product = findProductOr404(id, res);
+    if (!product) return;
 
-    if (req.body?.name === undefined && req.body?.age === undefined) {
+    if (
+        req.body?.photo === undefined &&
+        req.body?.name === undefined &&
+        req.body?.category === undefined &&
+        req.body?.description === undefined &&
+        req.body?.price === undefined) {
         return res.status(400).json({
             error: "Nothing to update",
         });
     }
 
-    const { name, age } = req.body;
+    const { photo, name, price, category, description } = req.body;
 
-    if (name !== undefined) user.name = name.trim();
-    if (age !== undefined) user.age = Number(age);
+    if (photo !== undefined) product.photo = photo.trim();
+    if (name !== undefined) product.name = name.trim();
+    if (category !== undefined) product.category = category.trim();
+    if (description !== undefined) product.description = description.trim();
+    if (price !== undefined) product.price = Number(price);
 
-    res.json(user);
+    res.json(product);
 });
 
-// DELETE /api/users/:id
-app.delete("/api/users/:id", (req, res) => {
+// DELETE /api/products/:id
+app.delete("/api/products/:id", (req, res) => {
     const id = req.params.id;
-    const exists = users.some((u) => u.id === id);
-    if (!exists) return res.statusCode(404).json({ error: "User not found" });
+    const exists = products.some((p) => p.id === id);
+    if (!exists) return res.status(404).json({ error: "Product not found" });
 
-    users = users.filter((u) => u.id !== id);
+    products = products.filter((p) => p.id !== id);
     res.status(204).send();
 });
 
@@ -103,5 +137,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-    console.log('Сервер запущен на http://localhost:${port}');
+    console.log(`Сервер запущен на http://localhost:${port}`);
 });
+

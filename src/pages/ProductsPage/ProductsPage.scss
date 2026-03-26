@@ -1,0 +1,267 @@
+$bg: #76B582;
+$bgFooter: #79649E;
+$panel: #F8FAE8;
+$border: rgba(255, 255, 255, 0.10);
+$text: #000000;
+$primary: #79649E;
+$primaryBg: #76B582;
+$success: #76B582;
+$successBg: #BBE6A8;
+$danger: #79649E;
+$dangerBg: #79649E;
+
+@mixin card($radius: 12px) {
+    border-radius: $radius;
+    border: 1px solid $border;
+    background: $panel;
+}
+
+@mixin container($w: 900px) {
+    max-width: $w;
+    width: 100%;
+    margin: 0 auto;
+}
+
+html {
+    background: $bg;
+}
+
+.page {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: $bg;
+    color: $text;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+.header {
+    border-bottom: 1px solid #BBE6A8;
+    background: $bgFooter;
+
+    &__inner {
+        @include container();
+        padding: 14px 16px;
+    }
+
+    &__right {
+        opacity: 0.75;
+        font-size: 13px;
+    }
+}
+
+.brand {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+}
+
+.container {
+    @include container();
+    padding: 16px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .title {
+        margin: 0;
+        font-size: 20px;
+        color: $panel;
+    }
+}
+
+// ===== Buttons =====
+.btn {
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+
+    &--primary {
+        background: $dangerBg;
+        border: 1px solid $primary;
+        color: $panel;
+    }
+
+    &--danger {
+        background: $dangerBg;
+        border: 1px solid $danger;
+        color: #F8FAE8;
+    }
+
+    &--success {
+        background: $successBg;
+        border: 1px solid $success;
+    }
+}
+
+.list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 500px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.empty {
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.18);
+    opacity: 0.85;
+}
+
+.productRow {
+    @include card(12px);
+    display: flex;
+    margin: 0px;
+    flex-flow: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+
+
+    .productPhoto {
+        max-width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 4px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .productId {
+        opacity: 0.7;
+        font-variant-numeric: tabular-nums;
+        font-size: small;
+    }
+
+    .productName {
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .productCategory {
+        opacity: 0.75;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .productDescription {
+        opacity: 0.75;
+        font-size: 14px;
+        text-align: center;
+    }
+    .productPrice {
+        opacity: 0.85;
+        font-size: 16px;
+    }
+}
+
+.productActions {
+    display: flex;
+    gap: 8px;
+}
+
+.footer {
+    border-top: 1px solid #F8FAE8;
+    background: $bgFooter;
+
+    &__inner {
+        @include container();
+        padding: 14px 16px;
+        opacity: 0.7;
+        font-size: 13px;
+        color:#F8FAE8;
+    }
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 48, 44, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.modal {
+    width: 100%;
+    max-width: 420px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $bgFooter;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+
+    &__header {
+        padding: 12px;
+        border-bottom: 1px solid $border;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: $panel;
+    }
+
+    &__title {
+        font-weight: 700;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 4px;
+    }
+}
+
+.iconBtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: transparent;
+    color: $panel;
+    cursor: pointer;
+}
+
+.form {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.label {
+    color: $panel;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.input {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $panel;
+    color: $text;
+    outline: none;
+}
